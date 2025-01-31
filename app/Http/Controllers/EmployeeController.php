@@ -21,9 +21,15 @@ class EmployeeController extends Controller
         ]);
        
         $employees = Employee::
-        when(isset($data['position']), fn($query) => $query->where('position', $data['position']))
-        ->when(isset($data['officeId']), fn($query) => $query->where('officeId', $data['officeId']))
-        ->when(isset($data['startDate']), fn ($query) => $query->where('startDate', $data['startDate']))
+        when($request->input('position'), 
+            fn($query, $value) => $query->where('position', $value)
+        )
+        ->when($request->input('officeId'), 
+            fn($query, $value) => $query->where('officeId', $value)
+        )
+        ->when($request->input('startDate'), 
+            fn($query, $value) => $query->where('startDate', $value)
+        )
         ->get();
 
         return response([
